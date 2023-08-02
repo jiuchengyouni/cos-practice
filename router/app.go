@@ -1,9 +1,11 @@
 package router
 
 import (
+	"bytes"
 	"cos_practice/cos"
 	"cos_practice/middlewares"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -19,7 +21,14 @@ func Router() *gin.Engine {
 		var saveFilePaths []string
 		userCos := cos.NewUserCos(context)
 		for _, file := range files {
-			err, saveFilePath := userCos.Upload(file, "这是标识")
+			//bytes与io.Reader转化，适合于grpc传输
+			fd, err := file.Open()
+			data, err := ioutil.ReadAll(fd)
+			if err != nil {
+				// handle error
+			}
+			fd2 := bytes.NewReader(data)
+			err, saveFilePath := userCos.Upload(fd2, "这是标识")
 			if err != nil {
 				context.JSON(http.StatusOK, gin.H{
 					"paths": "1" + err.Error(),
