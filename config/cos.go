@@ -4,5 +4,5 @@ package config
 var (
 	CosUrl       = "https://recruitbucket-1308338467.cos.ap-shanghai.myqcloud.com"
 	CosSecretId  = "AKIDOev87sSuBF9zkNnzyjKuLZZPErdGhy5z"
-	CosSecretKey = ""
+	CosSecretKey = "nPfjZmmaAWfbLsCILFvZBcv20oSBlDWd"
 )

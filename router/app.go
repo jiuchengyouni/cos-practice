@@ -14,15 +14,20 @@ func Router() *gin.Engine {
 	r.POST("/putFileTest", func(context *gin.Context) {
 		form, err := context.MultipartForm()
 		if err != nil {
-			//错误抛出
 		}
 		files := form.File["file"]
 		var saveFilePaths []string
 		userCos := cos.NewUserCos(context)
 		for _, file := range files {
-			if r, saveFilePath := userCos.Upload(file, "这是标识"); r == nil {
-				saveFilePaths = append(saveFilePaths, saveFilePath)
+			err, saveFilePath := userCos.Upload(file, "这是标识")
+			if err != nil {
+				context.JSON(http.StatusOK, gin.H{
+					"paths": "1" + err.Error(),
+				})
+				return
 			}
+			saveFilePaths = append(saveFilePaths, saveFilePath)
+
 		}
 		context.JSON(http.StatusOK, gin.H{
 			"paths": saveFilePaths,
